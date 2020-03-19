@@ -3,6 +3,8 @@ package mr
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -159,10 +161,10 @@ func (m *Master) Example(args *ExampleArgs, reply *ExampleReply) error {
 func (m *Master) server() {
 	rpc.Register(m)
 	rpc.HandleHTTP()
-	l, e := net.Listen("tcp", ":1234")
-	//sockname := masterSock()
-	//os.Remove(sockname)
-	//l, e := net.Listen("unix", sockname)
+	//l, e := net.Listen("tcp", ":1234")
+	sockname := masterSock()
+	os.Remove(sockname)
+	l, e := net.Listen("unix", sockname)
 	if e != nil {
 		log.Fatal("listen error:", e)
 	}
@@ -183,6 +185,13 @@ func (m *Master) Done() bool {
 	return m.isFilshReduce
 }
 
+func removeIntermediaFiles() {
+	files, _ := filepath.Glob("mr-[0-9]*-[0-9]*")
+	for _, fi := range files {
+		os.Remove(fi)
+	}
+}
+
 //
 // create a Master.
 // main/mrmaster.go calls this function.
@@ -193,7 +202,7 @@ func MakeMaster(files []string, nReduce int) *Master {
 	m.mux.Lock()
 	defer m.mux.Unlock()
 	// Your code here.
-
+	removeIntermediaFiles()
 	m.isFilshMap = false
 	m.isFilshReduce = false
 	m.nReduce = nReduce

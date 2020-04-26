@@ -4,7 +4,7 @@
 
 # 相关资源收集：
 
-🔍请访问gitbook：[https://reyunn.gitbook.io/mit6-824](https://reyunn.gitbook.io/mit6-824)
+🔍请访问gitbook：[https://yuyang.run/#/notes/分布式/6.824](https://yuyang.run/#/notes/分布式/6.824)
 
 
 
